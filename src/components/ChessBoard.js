@@ -1,13 +1,26 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import Square from "./Square";
 
-export class ChessBoard extends Component {
-  componentDidMount() {
-    const axeX = ["a", "b", "c", "d", "e", "f", "g"];
-    const axeY = [1, 2, 3, 4, 5, 6, 7, 8];
-  }
+class ChessBoard extends Component {
+  componentDidMount() {}
   render() {
-    return <div></div>;
+    const { squares } = this.props;
+
+    return (
+      <div className="chessBoard">
+        {squares.map(square => (
+          <Square key={square.name} data={square}></Square>
+        ))}
+      </div>
+    );
   }
 }
 
-export default ChessBoard;
+const mapStateToProps = state => {
+  return {
+    squares: state.squares
+  };
+};
+
+export default connect(mapStateToProps, null)(ChessBoard);
