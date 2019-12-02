@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Square extends Component {
+class PieceContainer extends Component {
   render() {
     const {
       refName,
@@ -14,4 +14,4 @@ class Square extends Component {
   }
 }
 
-export default Square;
+export default PieceContainer;
