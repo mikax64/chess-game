@@ -7,7 +7,12 @@ class Square extends Component {
       data: { name, color }
     } = this.props;
     return (
-      <div ref={refName} className={`square is-${color}`}>
+      <div
+        {...this.props}
+        ref={refName}
+        className={`square is-${color}`}
+        data-name={name}
+      >
         {name}
       </div>
     );

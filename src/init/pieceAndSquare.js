@@ -33,7 +33,7 @@ export const pieceName = [
   "pawn_8_black"
 ];
 
-export const squarePiece = [
+export const squarePieceInit = [
   "a1",
   "b1",
   "c1",

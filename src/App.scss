@@ -18,3 +18,13 @@
     background: #505050;
   }
 }
+
+.piece {
+  background: rgba(124, 12, 74, 0.3);
+  width: 12.5%;
+  height: 12.5%;
+  padding: 30px 5px 0 5px;
+  color: #fff;
+  word-break: break-all;
+  box-sizing: border-box;
+}

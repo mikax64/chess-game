@@ -1,13 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import Square from "./Square";
 import PieceContainer from "./PieceContainer";
-import { calculPiece } from "../redux/actions/pieceActions";
+import { calculMovePossible } from "../redux/actions/pieceActions";
 
 class ChessBoard extends Component {
   constructor(props) {
     super(props);
     const { squares } = props;
+
+    this.state = {
+      x: 0,
+      y: 0,
+      chessIsMount: false
+    };
 
     this.boardRef = React.createRef();
 
@@ -16,20 +23,38 @@ class ChessBoard extends Component {
     );
   }
 
+  onMouseMove = e => {
+    e.stopPropagation();
+    const mouseXPosition = e.clientX - this.boardRef.current.offsetLeft;
+    const mouseYPosition = e.clientY - this.boardRef.current.offsetTop;
+    this.setState({ x: mouseXPosition, y: mouseYPosition });
+  };
+
   showTarget = e => {
-    const { calculPiece, pieces } = this.props;
-    console.log(this[`squareRef_a4`].current.offsetTop);
-    calculPiece();
+    const { calculMovePossible, pieces } = this.props;
+    // console.log(this[`squareRef_b4`].current.offsetLeft);
+
     console.log(pieces);
   };
   componentDidMount() {
-    const { pieces } = this.props;
+    const { calculMovePossible } = this.props;
+    calculMovePossible();
+    this.setState({
+      chessIsMount: true
+    });
   }
+
   render() {
     const { squares, pieces } = this.props;
+    const { chessIsMount } = this.state;
 
     return (
-      <div onClick={this.showTarget} className="chessBoard" ref={this.boardRef}>
+      <div
+        onMouseUp={this.showTarget}
+        onMouseMove={this.onMouseMove}
+        className="chessBoard"
+        ref={this.boardRef}
+      >
         {squares.map(square => (
           <Square
             key={square.name}
@@ -38,9 +63,15 @@ class ChessBoard extends Component {
           ></Square>
         ))}
 
-        {pieces.map(piece => (
-          <PieceContainer key={piece.name} data={piece}></PieceContainer>
-        ))}
+        {chessIsMount &&
+          pieces.map(piece => (
+            <PieceContainer
+              refParent={this.boardRef}
+              key={piece.name}
+              data={piece}
+              positionpiece={this[`squareRef_${piece.currentSquare}`]}
+            ></PieceContainer>
+          ))}
       </div>
     );
   }
@@ -55,7 +86,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    calculPiece: () => dispatch(calculPiece())
+    calculMovePossible: () => dispatch(calculMovePossible())
   };
 };
 
