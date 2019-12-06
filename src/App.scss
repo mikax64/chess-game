@@ -1,9 +1,7 @@
 .chessBoard {
-  width: 600px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row-reverse;
-  height: 600px;
   position: relative;
 }
 .square {

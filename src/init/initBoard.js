@@ -2,7 +2,7 @@ import { pieceName, squarePieceInit } from "./pieceAndSquare";
 
 const axeX = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const squareNames = [];
-export const squareList = [];
+export const boardList = [];
 export const pieceList = [];
 
 createBoard();
@@ -25,21 +25,29 @@ function createBoard() {
       firstColor = "black";
       secondColor = "white";
     }
-    squareList.push({
-      name: squareNames[i],
-      color: i % 2 ? firstColor : secondColor
+    boardList.push({
+      squareName: squareNames[i],
+      squareColor: i % 2 ? firstColor : secondColor,
+      currentPiece: null
     });
   }
 }
 
 function initPiece() {
-  squareList.reverse();
+  boardList.reverse();
   for (let i = 0; i < pieceName.length; i++) {
     const splitPiece = pieceName[i].split("_");
+
+    boardList.forEach(el => {
+      if (el.squareName === squarePieceInit[i]) {
+        el.currentPiece = pieceName[i];
+      }
+    });
+
     pieceList.push({
       name: pieceName[i],
       currentSquare: squarePieceInit[i],
-      color: splitPiece[2],
+      pieceColor: splitPiece[2],
       type: splitPiece[0],
       movePossible: [],
       historic: [squarePieceInit[i]],

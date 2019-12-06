@@ -8,7 +8,7 @@ import { calculMovePossible } from "../redux/actions/pieceActions";
 class ChessBoard extends Component {
   constructor(props) {
     super(props);
-    const { squares } = props;
+    const { board } = props;
 
     this.state = {
       x: 0,
@@ -18,9 +18,7 @@ class ChessBoard extends Component {
 
     this.boardRef = React.createRef();
 
-    squares.map(
-      square => (this[`squareRef_${square.name}`] = React.createRef())
-    );
+    board.map(el => (this[`squareRef_${el.squareName}`] = React.createRef()));
   }
 
   onMouseMove = e => {
@@ -32,9 +30,8 @@ class ChessBoard extends Component {
 
   showTarget = e => {
     const { calculMovePossible, pieces } = this.props;
-    // console.log(this[`squareRef_b4`].current.offsetLeft);
 
-    console.log(pieces);
+    // console.log(this[`squareRef_b4`].current.offsetLeft);
   };
   componentDidMount() {
     const { calculMovePossible } = this.props;
@@ -45,21 +42,28 @@ class ChessBoard extends Component {
   }
 
   render() {
-    const { squares, pieces } = this.props;
-    const { chessIsMount } = this.state;
+    const { board, pieces } = this.props;
+    const { chessIsMount, playerTurn } = this.state;
+    const sizeBoard = 600;
+
+    const styles = {
+      width: sizeBoard + "px",
+      height: sizeBoard + "px"
+    };
 
     return (
       <div
+        style={styles}
         onMouseUp={this.showTarget}
         onMouseMove={this.onMouseMove}
         className="chessBoard"
         ref={this.boardRef}
       >
-        {squares.map(square => (
+        {board.map(el => (
           <Square
-            key={square.name}
-            data={square}
-            refName={this[`squareRef_${square.name}`]}
+            key={el.squareName}
+            data={el}
+            refName={this[`squareRef_${el.squareName}`]}
           ></Square>
         ))}
 
@@ -79,7 +83,7 @@ class ChessBoard extends Component {
 
 const mapStateToProps = state => {
   return {
-    squares: state.squares,
+    board: state.board,
     pieces: state.pieces
   };
 };

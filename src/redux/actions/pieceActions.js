@@ -18,7 +18,14 @@ export const updatePiecePosition = (pieceName, newPosition) => {
   };
 };
 
-export const updateBoard = (pieceName, newPosition) => {
+export const removePiece = pieceName => {
+  return {
+    type: "REMOVE_PIECE",
+    payload: pieceName
+  };
+};
+
+export const updatePiece = (pieceName, newPosition) => {
   return dispatch => {
     dispatch(updatePiecePosition(pieceName, newPosition));
     dispatch(updateHistoric());

@@ -4,16 +4,16 @@ class Square extends Component {
   render() {
     const {
       refName,
-      data: { name, color }
+      data: { squareName, squareColor }
     } = this.props;
     return (
       <div
         {...this.props}
         ref={refName}
-        className={`square is-${color}`}
-        data-name={name}
+        className={`square is-${squareColor}`}
+        data-name={squareName}
       >
-        {name}
+        {squareName}
       </div>
     );
   }

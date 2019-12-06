@@ -24,6 +24,17 @@ export const pieceReducer = (state = pieceList, action) => {
         };
       });
     }
+    case "REMOVE_PIECE": {
+      return state.map(piece => {
+        if (piece.name === action.payload) {
+          return {
+            ...piece,
+            currentSquare: ""
+          };
+        }
+        return { ...piece };
+      });
+    }
 
     default: {
       return state;
