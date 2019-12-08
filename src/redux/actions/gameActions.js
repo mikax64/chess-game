@@ -3,3 +3,8 @@ export const changePlayerTurn = () => {
     type: "PLAYER_TURN"
   };
 };
+export const updateGlobalHistoric = () => {
+  return {
+    type: "UPDATE_GLOBAL_HISTORIC"
+  };
+};

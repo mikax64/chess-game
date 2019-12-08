@@ -51,7 +51,9 @@ function initPiece() {
       type: splitPiece[0],
       movePossible: [],
       historic: [squarePieceInit[i]],
-      hasMoved: false
+      relativeHistoric: [],
+      hasMoved: false,
+      targetEnPassant: null
     });
   }
 }

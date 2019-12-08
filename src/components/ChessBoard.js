@@ -8,7 +8,7 @@ import { calculMovePossible } from "../redux/actions/pieceActions";
 class ChessBoard extends Component {
   constructor(props) {
     super(props);
-    const { board } = props;
+    const { board, pieces } = props;
 
     this.state = {
       x: 0,
@@ -29,9 +29,15 @@ class ChessBoard extends Component {
   };
 
   showTarget = e => {
-    const { calculMovePossible, pieces } = this.props;
+    const { board, pieces } = this.props;
+    console.log(board);
 
-    // console.log(this[`squareRef_b4`].current.offsetLeft);
+    //this[`squareRef_a4`].current.remove();
+    //this[`pieceRef_pawn_4_white`].current.remove();
+
+    //this[`pieceRef_knight_3_black`] = React.createRef();
+
+    console.log(pieces);
   };
   componentDidMount() {
     const { calculMovePossible } = this.props;
@@ -39,6 +45,10 @@ class ChessBoard extends Component {
     this.setState({
       chessIsMount: true
     });
+  }
+
+  someMethod() {
+    console.log("bar");
   }
 
   render() {
@@ -68,12 +78,13 @@ class ChessBoard extends Component {
         ))}
 
         {chessIsMount &&
-          pieces.map(piece => (
+          pieces.map(el => (
             <PieceContainer
               refParent={this.boardRef}
-              key={piece.name}
-              data={piece}
-              positionpiece={this[`squareRef_${piece.currentSquare}`]}
+              key={el.name}
+              data={el}
+              removePiece={this.someMethod}
+              positionpiece={this[`squareRef_${el.currentSquare}`]}
             ></PieceContainer>
           ))}
       </div>

@@ -1,5 +1,6 @@
 import { pieceList } from "../../init/initBoard";
 import { calculMovePossible } from "../helpers/calculMovePossible";
+import { getRelativeHistoric } from "../helpers/getRelativeHistoric";
 
 export const pieceReducer = (state = pieceList, action) => {
   switch (action.type) {
@@ -24,16 +25,22 @@ export const pieceReducer = (state = pieceList, action) => {
         };
       });
     }
-    case "REMOVE_PIECE": {
+    case "UPDATE_RELATIVE_HISTORIC": {
       return state.map(piece => {
-        if (piece.name === action.payload) {
-          return {
-            ...piece,
-            currentSquare: ""
-          };
-        }
-        return { ...piece };
+        return {
+          ...piece,
+          relativeHistoric: [
+            ...piece.relativeHistoric,
+            getRelativeHistoric(piece.historic, piece.currentSquare)
+          ]
+        };
       });
+    }
+    case "REMOVE_PIECE": {
+      return [
+        ...state.slice(0, action.payload),
+        ...state.slice(action.payload + 1)
+      ];
     }
 
     default: {

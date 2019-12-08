@@ -10,6 +10,12 @@ export const updateHistoric = () => {
   };
 };
 
+export const updateRelativeHistoric = () => {
+  return {
+    type: "UPDATE_RELATIVE_HISTORIC"
+  };
+};
+
 export const updatePiecePosition = (pieceName, newPosition) => {
   return {
     type: "UPDATE_POSITION_PIECE",
@@ -18,10 +24,18 @@ export const updatePiecePosition = (pieceName, newPosition) => {
   };
 };
 
-export const removePiece = pieceName => {
+export const removePiece = indexPiece => {
   return {
     type: "REMOVE_PIECE",
-    payload: pieceName
+    payload: indexPiece
+  };
+};
+
+export const updateEnPassant = (pieceName, target) => {
+  return {
+    type: "UPDATE_EN_PASSANT",
+    payload: pieceName,
+    meta: target
   };
 };
 
@@ -29,6 +43,7 @@ export const updatePiece = (pieceName, newPosition) => {
   return dispatch => {
     dispatch(updatePiecePosition(pieceName, newPosition));
     dispatch(updateHistoric());
+    dispatch(updateRelativeHistoric());
     dispatch(calculMovePossible());
   };
 };

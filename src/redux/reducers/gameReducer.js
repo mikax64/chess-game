@@ -1,5 +1,6 @@
 const inititalState = {
-  playerTurn: "white"
+  playerTurn: "white",
+  globalHistoric: { pieceMove: [] }
 };
 
 export const gameReducer = (state = inititalState, action) => {
@@ -8,6 +9,12 @@ export const gameReducer = (state = inititalState, action) => {
       return {
         ...state,
         playerTurn: state.playerTurn === "white" ? "black" : "white"
+      };
+    }
+    case "UPDATE_GLOBAL_HISTORIC": {
+      return {
+        ...state,
+        globalHistoric: [...state.globalHistoric]
       };
     }
     default: {

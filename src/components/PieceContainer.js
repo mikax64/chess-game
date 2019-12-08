@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Draggable from "react-draggable";
 import { updatePiece, removePiece } from "../redux/actions/pieceActions";
-import { changePlayerTurn } from "../redux/actions/gameActions";
+import {
+  changePlayerTurn,
+  updateGlobalHistoric
+} from "../redux/actions/gameActions";
 
 class PieceContainer extends Component {
   constructor(props) {
@@ -15,20 +18,30 @@ class PieceContainer extends Component {
 
       styleTop: positionpiece.current.offsetTop,
       styleLeft: positionpiece.current.offsetLeft,
-      styleEvent: "initial"
+      styleEvent: "initial",
+      pieceDragged: null
     };
+
+    //this.pieceRef = React.createRef();
+  }
+
+  componentDidMount() {
+    const { refName } = this.props;
+    console.log(this["pieceRef_pawn_4_white"]);
   }
 
   onStartDrag = e => {
-    const { refParent, pieces } = this.props;
+    const { refParent, refName, pieces } = this.props;
     const sizeSquare = e.target.offsetWidth / 2;
+
+    console.log(pieces);
 
     this.setState({
       styleTop: e.clientY - refParent.current.offsetTop - sizeSquare,
       styleLeft: e.clientX - refParent.current.offsetLeft - sizeSquare,
-      styleEvent: "none" // to get the target mouseUp on Square
+      styleEvent: "none", // to get the target mouseUp on Square,
+      pieceDragged: e.target
     });
-    console.log(pieces);
   };
   onStopDrag = e => {
     const {
@@ -37,8 +50,10 @@ class PieceContainer extends Component {
       changePlayerTurn,
       pieces,
       game,
-      data: { name, pieceColor }
+      data: { name, pieceColor, type, historic }
     } = this.props;
+
+    const { pieceDragged } = this.state;
 
     const targetX = e.target.offsetLeft;
     const targetY = e.target.offsetTop;
@@ -53,20 +68,19 @@ class PieceContainer extends Component {
     if (e.target.getAttribute("data-piece") !== null) {
       const target = e.target.getAttribute("data-piece");
       const piece = pieces.filter(piece => piece.name === target)[0];
+      const indexPiece = pieces.indexOf(piece);
 
       targetSquare = piece.currentSquare;
       if (
         movePossible.includes(targetSquare) &&
         pieceColor === game.playerTurn
       ) {
-        e.target.style.display = "none";
-        removePiece(target);
+        removePiece(indexPiece);
       }
     }
 
-    //console.log(pieces.filter(piece => piece.movePossible ))
-    //console.log(this.refs.refParent.refs[`squareRef_b4`].current.offsetTops);
-    console.log(pieceColor + game.playerTurn);
+    //refParent.current.querySelectorAll("[data-piece='pawn_2_white']").remove()
+
     if (movePossible.includes(targetSquare) && pieceColor === game.playerTurn) {
       this.setState({
         styleTop: targetY,
@@ -75,16 +89,38 @@ class PieceContainer extends Component {
         initStyleLeft: targetX,
         styleEvent: "initial"
       });
-      console.log("OKKKKK");
       updatePiece(name, targetSquare);
+      updateGlobalHistoric(pieceDragged.getAttribute("data-name"));
       changePlayerTurn();
+      removeEnPassant();
+
+      function removeEnPassant() {
+        if (
+          type === "pawn" &&
+          e.target.getAttribute("data-name") !== null &&
+          historic.length > 0
+        ) {
+          const lastSquareX = historic[historic.length - 1].split("")[0];
+          const lastSquareY = historic[historic.length - 1].split("")[1];
+          const currentSquareX = e.target
+            .getAttribute("data-name")
+            .split("")[0];
+
+          if (lastSquareX !== currentSquareX) {
+            const indexTarget = pieces.findIndex(
+              piece => piece.currentSquare === currentSquareX + lastSquareY
+            );
+
+            removePiece(indexTarget);
+          }
+        }
+      }
     } else {
       this.setState({
         styleTop: this.state.initStyleTop,
         styleLeft: this.state.initStyleLeft,
         styleEvent: "initial"
       });
-      console.log("NOOOOOO");
     }
   };
 
@@ -127,8 +163,10 @@ const mapDispatchToProps = dispatch => {
   return {
     updatePiece: (pieceName, newPosition) =>
       dispatch(updatePiece(pieceName, newPosition)),
-    removePiece: pieceName => dispatch(removePiece(pieceName)),
-    changePlayerTurn: () => dispatch(changePlayerTurn())
+    removePiece: indexPiece => dispatch(removePiece(indexPiece)),
+    changePlayerTurn: () => dispatch(changePlayerTurn()),
+    updateGlobalHistoric: pieceDragged =>
+      dispatch(updateGlobalHistoric(pieceDragged))
   };
 };
 

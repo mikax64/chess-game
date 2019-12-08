@@ -6,9 +6,9 @@ class Square extends Component {
       refName,
       data: { squareName, squareColor }
     } = this.props;
+
     return (
       <div
-        {...this.props}
         ref={refName}
         className={`square is-${squareColor}`}
         data-name={squareName}

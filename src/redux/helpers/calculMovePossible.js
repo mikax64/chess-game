@@ -1,5 +1,4 @@
 export const calculMovePossible = (pieceList, piece) => {
-  const piecePosition = pieceList;
   const axeX = "abcdefgh";
   const pieceName = piece.name.split("_")[0];
 
@@ -70,17 +69,110 @@ export const calculMovePossible = (pieceList, piece) => {
     }
   }
 
-  const increase = move => {
-    return move + 1;
-  };
-  const decrease = move => {
-    return move - 1;
+  function isOpponentEnPassant(squareX, squareY, pieceColor) {
+    const letter = axeX.charAt(squareX - 1);
+    const square = letter + squareY;
+
+    const squareToCheck = pieceList.filter(
+      piece => piece.currentSquare === square
+    );
+
+    if (
+      squareToCheck[0] &&
+      squareToCheck[0].type === "pawn" &&
+      squareToCheck[0].pieceColor !== pieceColor &&
+      squareToCheck[0].relativeHistoric[
+        squareToCheck[0].relativeHistoric.length - 1
+      ] === square
+    ) {
+      return true;
+    }
+  }
+
+  const addMovePawn = (squareX, squareY, isDiagonal, isEnPassant) => {
+    const letter = axeX.charAt(squareX - 1);
+    const squareToAdd = letter + squareY;
+
+    if (
+      isEmptySquare(squareX, squareY) ||
+      (isOpponent(squareX, squareY) && isDiagonal) ||
+      (isEnPassant && isEmptySquare(squareX, squareY))
+    ) {
+      movePossible.push(squareToAdd);
+    }
   };
 
   switch (pieceName) {
     case "pawn": {
       let moveX = pieceAxeX;
       let moveY = pieceAxeY;
+      let isDiagonal = false;
+      let isEnPassant = false;
+
+      if (pieceColor === "white") {
+        if (pieceAxeY < 8) {
+          addMovePawn(moveX, moveY + 1, isDiagonal, isEnPassant);
+          if (pieceAxeX < 8 && isOpponent(moveX + 1, moveY + 1)) {
+            isDiagonal = true;
+            addMovePawn(moveX + 1, moveY + 1, isDiagonal, isEnPassant);
+          }
+          if (
+            pieceAxeX < 8 &&
+            pieceAxeY === 5 &&
+            isOpponentEnPassant(moveX + 1, moveY)
+          ) {
+            isEnPassant = true;
+            addMovePawn(moveX + 1, moveY + 1, isDiagonal, isEnPassant);
+          }
+          if (pieceAxeX > 1 && isOpponent(moveX - 1, moveY + 1)) {
+            isDiagonal = true;
+            addMovePawn(moveX - 1, moveY + 1, isDiagonal, isEnPassant);
+          }
+          if (
+            pieceAxeX > 1 &&
+            pieceAxeY === 5 &&
+            isOpponentEnPassant(moveX - 1, moveY)
+          ) {
+            isEnPassant = true;
+            addMovePawn(moveX - 1, moveY + 1, isDiagonal, isEnPassant);
+          }
+          if (!piece.hasMoved) {
+            addMovePawn(moveX, moveY + 2, isDiagonal, isEnPassant);
+          }
+        }
+      } else {
+        if (pieceAxeY > 1) {
+          addMovePawn(moveX, moveY - 1, isDiagonal);
+          if (pieceAxeX < 8 && isOpponent(moveX + 1, moveY - 1)) {
+            isDiagonal = true;
+            addMovePawn(moveX + 1, moveY - 1, isDiagonal);
+          }
+
+          if (
+            pieceAxeX < 8 &&
+            pieceAxeY === 4 &&
+            isOpponentEnPassant(moveX + 1, moveY)
+          ) {
+            isEnPassant = true;
+            addMovePawn(moveX + 1, moveY - 1, isDiagonal, isEnPassant);
+          }
+          if (pieceAxeX > 1 && isOpponent(moveX - 1, moveY - 1)) {
+            isDiagonal = true;
+            addMovePawn(moveX - 1, moveY - 1, isDiagonal);
+          }
+          if (
+            pieceAxeX > 1 &&
+            pieceAxeY === 4 &&
+            isOpponentEnPassant(moveX - 1, moveY)
+          ) {
+            isEnPassant = true;
+            addMovePawn(moveX - 1, moveY - 1, isDiagonal, isEnPassant);
+          }
+          if (!piece.hasMoved) {
+            addMovePawn(moveX, moveY - 2, isDiagonal);
+          }
+        }
+      }
 
       // if (pieceColor === "white") {
       //   if (pieceAxeX > 1 && pieceAxeX < 8 && pieceAxeY < 8) {
@@ -101,22 +193,6 @@ export const calculMovePossible = (pieceList, piece) => {
       //     addMove(decrease(moveX), decrease(moveY));
       //   }
       // }
-
-      if (pieceColor === "white") {
-        if (pieceAxeY < 8) {
-          addMove(moveX, moveY + 1);
-          if (!piece.hasMoved) {
-            addMove(moveX, moveY + 2);
-          }
-        }
-      } else {
-        if (pieceAxeY > 1) {
-          addMove(moveX, moveY - 1);
-          if (!piece.hasMoved) {
-            addMove(moveX, moveY - 2);
-          }
-        }
-      }
 
       return movePossible;
     }
