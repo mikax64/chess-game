@@ -45,50 +45,6 @@ export const calculMovePossible = (pieceList, piece) => {
     }
   };
 
-  function isEmptySquare(squareX, squareY) {
-    const letter = axeX.charAt(squareX - 1);
-    const square = letter + squareY;
-
-    const squareToCheck = pieceList.filter(
-      piece => piece.currentSquare === square
-    );
-
-    return squareToCheck.length === 0 ? true : false;
-  }
-
-  function isOpponent(squareX, squareY) {
-    const letter = axeX.charAt(squareX - 1);
-    const square = letter + squareY;
-
-    const squareToCheck = pieceList.filter(
-      piece => piece.currentSquare === square
-    );
-
-    if (squareToCheck[0] && squareToCheck[0].pieceColor !== pieceColor) {
-      return true;
-    }
-  }
-
-  function isOpponentEnPassant(squareX, squareY, pieceColor) {
-    const letter = axeX.charAt(squareX - 1);
-    const square = letter + squareY;
-
-    const squareToCheck = pieceList.filter(
-      piece => piece.currentSquare === square
-    );
-
-    if (
-      squareToCheck[0] &&
-      squareToCheck[0].type === "pawn" &&
-      squareToCheck[0].pieceColor !== pieceColor &&
-      squareToCheck[0].relativeHistoric[
-        squareToCheck[0].relativeHistoric.length - 1
-      ] === square
-    ) {
-      return true;
-    }
-  }
-
   const addMovePawn = (squareX, squareY, isDiagonal, isEnPassant) => {
     const letter = axeX.charAt(squareX - 1);
     const squareToAdd = letter + squareY;
@@ -307,6 +263,7 @@ export const calculMovePossible = (pieceList, piece) => {
     };
 
     moveChange();
+
     while (
       moveX > 0 &&
       moveX < 9 &&
@@ -319,6 +276,50 @@ export const calculMovePossible = (pieceList, piece) => {
     }
     if (isOpponent(moveX, moveY)) {
       addMove(moveX, moveY);
+    }
+  }
+
+  function isEmptySquare(squareX, squareY) {
+    const letter = axeX.charAt(squareX - 1);
+    const square = letter + squareY;
+
+    const squareToCheck = pieceList.filter(
+      piece => piece.currentSquare === square
+    );
+
+    return squareToCheck.length === 0 ? true : false;
+  }
+
+  function isOpponent(squareX, squareY) {
+    const letter = axeX.charAt(squareX - 1);
+    const square = letter + squareY;
+
+    const squareToCheck = pieceList.filter(
+      piece => piece.currentSquare === square
+    );
+
+    if (squareToCheck[0] && squareToCheck[0].pieceColor !== pieceColor) {
+      return true;
+    }
+  }
+
+  function isOpponentEnPassant(squareX, squareY, pieceColor) {
+    const letter = axeX.charAt(squareX - 1);
+    const square = letter + squareY;
+
+    const squareToCheck = pieceList.filter(
+      piece => piece.currentSquare === square
+    );
+
+    if (
+      squareToCheck[0] &&
+      squareToCheck[0].type === "pawn" &&
+      squareToCheck[0].pieceColor !== pieceColor &&
+      squareToCheck[0].relativeHistoric[
+        squareToCheck[0].relativeHistoric.length - 1
+      ] === square
+    ) {
+      return true;
     }
   }
 };

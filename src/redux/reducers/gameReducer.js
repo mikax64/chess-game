@@ -1,6 +1,7 @@
 const inititalState = {
   playerTurn: "white",
-  globalHistoric: { pieceMove: [] }
+  globalHistoric: { pieceMove: [] },
+  kingCheck: { isCheck: false, color: null }
 };
 
 export const gameReducer = (state = inititalState, action) => {
@@ -15,6 +16,19 @@ export const gameReducer = (state = inititalState, action) => {
       return {
         ...state,
         globalHistoric: [...state.globalHistoric]
+      };
+    }
+
+    case "KING_CHECK_UPDATE": {
+      return {
+        ...state,
+        kingCheck: { ...state.kingCheck, isCheck: true, color: action.payload }
+      };
+    }
+    case "KING_CHECK_REMOVE": {
+      return {
+        ...state,
+        kingCheck: { ...state.kingCheck, isCheck: false, color: null }
       };
     }
     default: {

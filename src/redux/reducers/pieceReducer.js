@@ -12,7 +12,7 @@ export const pieceReducer = (state = pieceList, action) => {
         return { ...piece };
       });
     }
-    case "CALCUL_MOVE_POSSIBLE": {
+    case "CALCUL_MOVES": {
       return state.map(piece => {
         return { ...piece, movePossible: calculMovePossible(state, piece) };
       });

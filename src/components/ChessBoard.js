@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import Square from "./Square";
 import PieceContainer from "./PieceContainer";
-import { calculMovePossible } from "../redux/actions/pieceActions";
+import { calculMoves } from "../redux/actions/pieceActions";
 
 class ChessBoard extends Component {
   constructor(props) {
@@ -40,8 +40,8 @@ class ChessBoard extends Component {
     console.log(pieces);
   };
   componentDidMount() {
-    const { calculMovePossible } = this.props;
-    calculMovePossible();
+    const { calculMoves } = this.props;
+    calculMoves();
     this.setState({
       chessIsMount: true
     });
@@ -101,7 +101,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    calculMovePossible: () => dispatch(calculMovePossible())
+    calculMoves: () => dispatch(calculMoves())
   };
 };
 
