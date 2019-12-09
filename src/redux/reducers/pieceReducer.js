@@ -43,6 +43,29 @@ export const pieceReducer = (state = pieceList, action) => {
       ];
     }
 
+    case "RESET_MOVES": {
+      return state.map(piece => {
+        return {
+          ...piece,
+          movePossible: [""]
+        };
+      });
+    }
+
+    case "UPDTATE_KING_CHECK_MOVES": {
+      console.log(state);
+      return state.map(piece => {
+        if (piece.name === action.payload.pieceName) {
+          return {
+            ...piece,
+            movePossible: action.payload.movePossible
+          };
+        } else {
+          return { ...piece };
+        }
+      });
+    }
+
     default: {
       return state;
     }

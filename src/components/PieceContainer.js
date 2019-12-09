@@ -34,14 +34,14 @@ class PieceContainer extends Component {
     const { refParent, refName, pieces } = this.props;
     const sizeSquare = e.target.offsetWidth / 2;
 
-    console.log(pieces);
-
     this.setState({
       styleTop: e.clientY - refParent.current.offsetTop - sizeSquare,
       styleLeft: e.clientX - refParent.current.offsetLeft - sizeSquare,
       styleEvent: "none", // to get the target mouseUp on Square,
       pieceDragged: e.target
     });
+
+    console.log(pieces);
   };
   onStopDrag = e => {
     const {

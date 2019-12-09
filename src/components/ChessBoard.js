@@ -36,8 +36,6 @@ class ChessBoard extends Component {
     //this[`pieceRef_pawn_4_white`].current.remove();
 
     //this[`pieceRef_knight_3_black`] = React.createRef();
-
-    console.log(pieces);
   };
   componentDidMount() {
     const { calculMoves } = this.props;

@@ -6,6 +6,11 @@ export const calculMoves = () => {
     type: "CALCUL_MOVES"
   };
 };
+export const resetMoves = () => {
+  return {
+    type: "RESET_MOVES"
+  };
+};
 
 export const updateHistoric = () => {
   return {
@@ -56,6 +61,13 @@ export const kingCheckRemove = color => {
   };
 };
 
+export const updateKingCheckMoves = piece => {
+  return {
+    type: "UPDTATE_KING_CHECK_MOVES",
+    payload: piece
+  };
+};
+
 export const updatePiece = (pieceName, newPosition) => {
   return (dispatch, getState) => {
     dispatch(updatePiecePosition(pieceName, newPosition));
@@ -74,51 +86,54 @@ export const updatePiece = (pieceName, newPosition) => {
     }
 
     const { game } = getState();
+    kingCheckMoves();
+    function kingCheckMoves() {
+      if (game.kingCheck.isCheck === true) {
+        const kingColor = game.kingCheck.color;
+        const movesPieces = [];
 
-    if (game.kingCheck.isCheck === true) {
-      const kingColor = game.kingCheck.color;
-      // const oppositeColor = kingColor === "white" ? "black" : "white";
+        for (let i = 0; i < pieces.length; i++) {
+          if (pieces[i].pieceColor === kingColor) {
+            const moves = pieces[i].movePossible;
+            const pieceName = pieces[i].name;
 
-      for (let i = 0; i < pieces.length; i++) {
-        if (pieces[i].pieceColor === kingColor) {
-          const moves = pieces[i].movePossible;
-          const pieceName = pieces[i].name;
+            for (let j = 0; j < moves.length; j++) {
+              const newPieceList = JSON.parse(JSON.stringify(pieces));
 
-          for (let j = 0; j < moves.length; j++) {
-            const newPieceList = JSON.parse(JSON.stringify(pieces));
-
-            const currentPiece = newPieceList.filter(
-              piece => piece.name === pieceName
-            )[0];
-
-            const objIndex = newPieceList.findIndex(
-              piece => piece.name === pieceName
-            );
-
-            // newPieceList.map(piece =>
-            //   piece.name === pieceName
-            //     ? { ...piece, currentSquare: moves[j] }
-            //     : piece
-            // );
-
-            newPieceList[objIndex].currentSquare = moves[j];
-            newPieceList[objIndex].hasMoved = true;
-            // newPieceList[objIndex].movePossible = calculMovePossible(
-            //   newPieceList,
-            //   currentPiece
-            // );
-
-            for (let k = 0; k < newPieceList.length; k++) {
-              newPieceList[k].movePossible = calculMovePossible(
-                newPieceList,
-                newPieceList[k]
+              const objIndex = newPieceList.findIndex(
+                piece => piece.name === pieceName
               );
-            }
 
-            console.log(pieceName);
-            console.log(newPieceList);
-            console.log(kingCheck(newPieceList, kingColor));
+              newPieceList[objIndex].currentSquare = moves[j];
+              newPieceList[objIndex].hasMoved = true;
+
+              for (let k = 0; k < newPieceList.length; k++) {
+                newPieceList[k].movePossible = calculMovePossible(
+                  newPieceList,
+                  newPieceList[k]
+                );
+              }
+
+              if (kingCheck(newPieceList, kingColor) === false) {
+                const pieceExist = movesPieces.findIndex(
+                  piece => piece.pieceName === pieceName
+                );
+
+                if (pieceExist > -1) {
+                  movesPieces[pieceExist].movePossible.push(moves[j]);
+                } else {
+                  movesPieces.push({
+                    pieceName: pieceName,
+                    movePossible: [moves[j]]
+                  });
+                }
+              }
+            }
           }
+        }
+        dispatch(resetMoves());
+        for (let i = 0; i < movesPieces.length; i++) {
+          dispatch(updateKingCheckMoves(movesPieces[i]));
         }
       }
     }
