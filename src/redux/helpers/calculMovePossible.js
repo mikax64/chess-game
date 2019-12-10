@@ -15,9 +15,23 @@ export const calculMovePossible = (pieceList, piece) => {
     movePossible.push(squareToAdd);
   };
 
-  const addMoveKing = (squareX, squareY) => {
+  const addMoveKing = (
+    squareX,
+    squareY,
+    shortCastling = false,
+    longCastling = false
+  ) => {
     const letter = axeX.charAt(squareX - 1);
     const squareToAdd = letter + squareY;
+
+    if (shortCastling) {
+    }
+
+    function castling(type) {
+      if (pieceColor === "white") {
+        const rookName = "";
+      }
+    }
 
     if (
       squareX > 0 &&

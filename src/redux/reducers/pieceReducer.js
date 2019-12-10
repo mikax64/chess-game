@@ -53,7 +53,6 @@ export const pieceReducer = (state = pieceList, action) => {
     }
 
     case "UPDTATE_KING_CHECK_MOVES": {
-      console.log(state);
       return state.map(piece => {
         if (piece.name === action.payload.pieceName) {
           return {

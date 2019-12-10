@@ -27,7 +27,6 @@ class PieceContainer extends Component {
 
   componentDidMount() {
     const { refName } = this.props;
-    console.log(this["pieceRef_pawn_4_white"]);
   }
 
   onStartDrag = e => {
@@ -40,8 +39,7 @@ class PieceContainer extends Component {
       styleEvent: "none", // to get the target mouseUp on Square,
       pieceDragged: e.target
     });
-
-    console.log(pieces);
+    //console.log(pieces);
   };
   onStopDrag = e => {
     const {
@@ -82,17 +80,33 @@ class PieceContainer extends Component {
     //refParent.current.querySelectorAll("[data-piece='pawn_2_white']").remove()
 
     if (movePossible.includes(targetSquare) && pieceColor === game.playerTurn) {
-      this.setState({
-        styleTop: targetY,
-        styleLeft: targetX,
-        initStyleTop: targetY,
-        initStyleLeft: targetX,
-        styleEvent: "initial"
-      });
-      updatePiece(name, targetSquare);
-      updateGlobalHistoric(pieceDragged.getAttribute("data-name"));
-      changePlayerTurn();
-      removeEnPassant();
+      this.setState(
+        {
+          styleTop: targetY,
+          styleLeft: targetX,
+          initStyleTop: targetY,
+          initStyleLeft: targetX,
+          styleEvent: "initial"
+        },
+        () => {
+          changePlayerTurn();
+          updatePiece(name, targetSquare);
+          updateGlobalHistoric(pieceDragged.getAttribute("data-name"));
+
+          removeEnPassant();
+          checkCastling(targetSquare);
+        }
+      );
+
+      function checkCastling(targetSquare) {
+        const piece = pieceDragged.getAttribute("data-piece").split("_");
+        const type = piece[0];
+
+        if (type === "king" && targetSquare === "g1") {
+        }
+        if (type === "king" && targetSquare === "c1") {
+        }
+      }
 
       function removeEnPassant() {
         if (
@@ -126,6 +140,7 @@ class PieceContainer extends Component {
 
   render() {
     const {
+      refName,
       data: { name }
     } = this.props;
 
@@ -143,7 +158,7 @@ class PieceContainer extends Component {
         onStart={this.onStartDrag}
         onStop={this.onStopDrag}
       >
-        <div className={`piece`} style={styles} data-piece={name}>
+        <div ref={refName} className={`piece`} style={styles} data-piece={name}>
           {name}
         </div>
       </Draggable>

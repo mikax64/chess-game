@@ -1,5 +1,5 @@
 import { kingCheck } from "../helpers/kingCheck";
-import { calculMovePossible } from "../helpers/calculMovePossible";
+import { kingCheckMoves } from "../helpers/kingCheckMoves";
 
 export const calculMoves = () => {
   return {
@@ -74,7 +74,8 @@ export const updatePiece = (pieceName, newPosition) => {
     dispatch(updateHistoric());
     dispatch(updateRelativeHistoric());
     dispatch(calculMoves());
-    const { pieces } = getState();
+
+    const { pieces, game } = getState();
     if (kingCheck(pieces, "white") === true) {
       dispatch(kingCheckUpdate("white"));
     } else {
@@ -85,57 +86,6 @@ export const updatePiece = (pieceName, newPosition) => {
       }
     }
 
-    const { game } = getState();
-    kingCheckMoves();
-    function kingCheckMoves() {
-      if (game.kingCheck.isCheck === true) {
-        const kingColor = game.kingCheck.color;
-        const movesPieces = [];
-
-        for (let i = 0; i < pieces.length; i++) {
-          if (pieces[i].pieceColor === kingColor) {
-            const moves = pieces[i].movePossible;
-            const pieceName = pieces[i].name;
-
-            for (let j = 0; j < moves.length; j++) {
-              const newPieceList = JSON.parse(JSON.stringify(pieces));
-
-              const objIndex = newPieceList.findIndex(
-                piece => piece.name === pieceName
-              );
-
-              newPieceList[objIndex].currentSquare = moves[j];
-              newPieceList[objIndex].hasMoved = true;
-
-              for (let k = 0; k < newPieceList.length; k++) {
-                newPieceList[k].movePossible = calculMovePossible(
-                  newPieceList,
-                  newPieceList[k]
-                );
-              }
-
-              if (kingCheck(newPieceList, kingColor) === false) {
-                const pieceExist = movesPieces.findIndex(
-                  piece => piece.pieceName === pieceName
-                );
-
-                if (pieceExist > -1) {
-                  movesPieces[pieceExist].movePossible.push(moves[j]);
-                } else {
-                  movesPieces.push({
-                    pieceName: pieceName,
-                    movePossible: [moves[j]]
-                  });
-                }
-              }
-            }
-          }
-        }
-        dispatch(resetMoves());
-        for (let i = 0; i < movesPieces.length; i++) {
-          dispatch(updateKingCheckMoves(movesPieces[i]));
-        }
-      }
-    }
+    kingCheckMoves(pieces, game.playerTurn);
   };
 };
