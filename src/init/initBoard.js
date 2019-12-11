@@ -4,9 +4,11 @@ const axeX = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const squareNames = [];
 export const boardList = [];
 export const pieceList = [];
+export const boardSize = 600;
 
 createBoard();
 initPiece();
+calculPiecePosition();
 
 function createBoard() {
   for (let i = 1; i < 9; i++) {
@@ -18,6 +20,7 @@ function createBoard() {
   for (let i = 0; i < squareNames.length; i++) {
     let firstColor = null;
     let secondColor = null;
+
     if (squareNames[i].slice(-1) % 2) {
       firstColor = "white";
       secondColor = "black";
@@ -28,13 +31,16 @@ function createBoard() {
     boardList.push({
       squareName: squareNames[i],
       squareColor: i % 2 ? firstColor : secondColor,
-      currentPiece: null
+      currentPiece: null,
+      xPosition: null,
+      yPosition: null
     });
   }
 }
 
 function initPiece() {
   boardList.reverse();
+
   for (let i = 0; i < pieceName.length; i++) {
     const splitPiece = pieceName[i].split("_");
 
@@ -49,11 +55,25 @@ function initPiece() {
       currentSquare: squarePieceInit[i],
       pieceColor: splitPiece[2],
       type: splitPiece[0],
-      movePossible: [],
+      movePossible: [""],
       historic: [squarePieceInit[i]],
       relativeHistoric: [],
       hasMoved: false,
-      targetEnPassant: null
+      targetEnPassant: null,
+      xPosition: null,
+      yPosition: null
     });
   }
+}
+
+function calculPiecePosition() {
+  const squareSize = boardSize / 8;
+
+  pieceList.map(piece => {
+    const squareX = axeX.indexOf(piece.currentSquare[0]);
+    const squareY = piece.currentSquare[1];
+    piece.xPosition = squareX * squareSize;
+    piece.yPosition = boardSize - squareSize * squareY;
+    return piece;
+  });
 }

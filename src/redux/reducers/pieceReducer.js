@@ -45,10 +45,12 @@ export const pieceReducer = (state = pieceList, action) => {
 
     case "RESET_MOVES": {
       return state.map(piece => {
-        return {
-          ...piece,
-          movePossible: [""]
-        };
+        if (piece.pieceColor === action.payload)
+          return {
+            ...piece,
+            movePossible: [""]
+          };
+        return { ...piece };
       });
     }
 

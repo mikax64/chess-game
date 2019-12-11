@@ -6,9 +6,10 @@ export const calculMoves = () => {
     type: "CALCUL_MOVES"
   };
 };
-export const resetMoves = () => {
+export const resetMoves = color => {
   return {
-    type: "RESET_MOVES"
+    type: "RESET_MOVES",
+    payload: color
   };
 };
 
@@ -65,6 +66,15 @@ export const updateKingCheckMoves = piece => {
   return {
     type: "UPDTATE_KING_CHECK_MOVES",
     payload: piece
+  };
+};
+
+export const updateCastling = (piece, square, add) => {
+  return {
+    type: "UPDTATE_CASTLING",
+    payload: piece,
+    meta: square,
+    add
   };
 };
 

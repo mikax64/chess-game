@@ -10,14 +10,16 @@ import {
 class PieceContainer extends Component {
   constructor(props) {
     super(props);
-    const { positionpiece } = props;
+    const {
+      data: { xPosition, yPosition }
+    } = props;
 
     this.state = {
-      initStyleTop: positionpiece.current.offsetTop,
-      initStyleLeft: positionpiece.current.offsetLeft,
+      initStyleTop: yPosition,
+      initStyleLeft: xPosition,
 
-      styleTop: positionpiece.current.offsetTop,
-      styleLeft: positionpiece.current.offsetLeft,
+      styleTop: yPosition,
+      styleLeft: xPosition,
       styleEvent: "initial",
       pieceDragged: null
     };
@@ -77,8 +79,6 @@ class PieceContainer extends Component {
       }
     }
 
-    //refParent.current.querySelectorAll("[data-piece='pawn_2_white']").remove()
-
     if (movePossible.includes(targetSquare) && pieceColor === game.playerTurn) {
       this.setState(
         {
@@ -94,19 +94,27 @@ class PieceContainer extends Component {
           updateGlobalHistoric(pieceDragged.getAttribute("data-name"));
 
           removeEnPassant();
-          checkCastling(targetSquare);
         }
       );
 
-      function checkCastling(targetSquare) {
-        const piece = pieceDragged.getAttribute("data-piece").split("_");
-        const type = piece[0];
+      // function checkCastling() {
 
-        if (type === "king" && targetSquare === "g1") {
-        }
-        if (type === "king" && targetSquare === "c1") {
-        }
-      }
+      //   if (castling("short") !== false) {
+      //     movePossible.push(castling("short"));
+      //   }
+      //   if (castling("long") !== false) {
+      //     movePossible.push("long");
+      //   }
+      //   console.log(pieces);
+
+      //   const piece = pieceDragged.getAttribute("data-piece").split("_");
+      //   const type = piece[0];
+
+      //   if (type === "king" && targetSquare === "g1") {
+      //   }
+      //   if (type === "king" && targetSquare === "c1") {
+      //   }
+      // }
 
       function removeEnPassant() {
         if (

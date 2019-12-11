@@ -27,7 +27,9 @@ export const kingCheckMoves = (pieces, colorToCheck) => {
             piece.name !== pieceName
         );
 
-        newPieceList.splice(pieceToRemoveIndex, 1);
+        if (pieceToRemoveIndex > -1) {
+          newPieceList.splice(pieceToRemoveIndex, 1);
+        }
 
         for (let k = 0; k < newPieceList.length; k++) {
           newPieceList[k].movePossible = calculMovePossible(
@@ -52,9 +54,8 @@ export const kingCheckMoves = (pieces, colorToCheck) => {
       }
     }
   }
-  store.dispatch(resetMoves());
+  store.dispatch(resetMoves(colorToCheck));
   for (let i = 0; i < movesPieces.length; i++) {
-    // console.log(movesPieces[i]);
     store.dispatch(updateKingCheckMoves(movesPieces[i]));
   }
 };

@@ -17,9 +17,6 @@ class ChessBoard extends Component {
     };
 
     this.boardRef = React.createRef();
-
-    board.map(el => (this[`squareRef_${el.squareName}`] = React.createRef()));
-    pieces.map(el => (this[`pieceRef_${el.name}`] = React.createRef()));
   }
 
   onMouseMove = e => {
@@ -40,11 +37,13 @@ class ChessBoard extends Component {
     //this[`pieceRef_rook_2_white`].current.offsetLeft = 130;
   };
   componentDidMount() {
-    const { calculMoves } = this.props;
+    const { calculMoves, board } = this.props;
     calculMoves();
     this.setState({
       chessIsMount: true
     });
+
+    console.log(board);
   }
 
   someMethod() {
@@ -70,18 +69,13 @@ class ChessBoard extends Component {
         ref={this.boardRef}
       >
         {board.map(el => (
-          <Square
-            key={el.squareName}
-            data={el}
-            refName={this[`squareRef_${el.squareName}`]}
-          ></Square>
+          <Square key={el.squareName} data={el}></Square>
         ))}
 
         {chessIsMount &&
           pieces.map(el => (
             <PieceContainer
               refParent={this.boardRef}
-              refName={this[`pieceRef_${el.name}`]}
               key={el.name}
               data={el}
               removePiece={this.someMethod}
