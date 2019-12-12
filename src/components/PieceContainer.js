@@ -94,19 +94,18 @@ class PieceContainer extends Component {
       function handlePromotion() {
         const pieceName = pieceDragged.getAttribute("data-piece");
         const piece = pieceName.split("_")[0];
+        console.log(piece);
 
         if (
           (piece === "pawn" && parseInt(targetSquare[1]) === 8) ||
-          parseInt(targetSquare[1]) === 1
+          (piece === "pawn" && parseInt(targetSquare[1]) === 1)
         ) {
           const numberOfQueens = pieces.filter(piece => {
             return piece.type === "queen" && piece.pieceColor === pieceColor;
           });
 
           const newNumberQueen = numberOfQueens.length + 1;
-
           const endName = `_${newNumberQueen}_${pieceColor}`;
-          console.log(endName);
 
           promotionPiece(pieceName, endName);
         }
