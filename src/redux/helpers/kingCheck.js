@@ -1,5 +1,4 @@
 export const kingCheck = (pieceList, color) => {
-  console.log(pieceList);
   const opposite = color === "white" ? "black" : "white";
   const king = pieceList.filter(piece => piece.name === `king_1_${color}`)[0]
     .currentSquare;

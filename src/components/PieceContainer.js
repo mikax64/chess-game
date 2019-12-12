@@ -27,10 +27,6 @@ class PieceContainer extends Component {
     //this.pieceRef = React.createRef();
   }
 
-  componentDidMount() {
-    const { refName } = this.props;
-  }
-
   onStartDrag = e => {
     const { refParent, refName, pieces } = this.props;
     const sizeSquare = e.target.offsetWidth / 2;
@@ -54,10 +50,8 @@ class PieceContainer extends Component {
     } = this.props;
 
     const { pieceDragged } = this.state;
-
     const targetX = e.target.offsetLeft;
     const targetY = e.target.offsetTop;
-
     let targetSquare;
     const movePossible = pieces.filter(piece => piece.name === name)[0]
       .movePossible;
@@ -69,7 +63,6 @@ class PieceContainer extends Component {
       const target = e.target.getAttribute("data-piece");
       const piece = pieces.filter(piece => piece.name === target)[0];
       const indexPiece = pieces.indexOf(piece);
-
       targetSquare = piece.currentSquare;
       if (
         movePossible.includes(targetSquare) &&
@@ -94,27 +87,22 @@ class PieceContainer extends Component {
           updateGlobalHistoric(pieceDragged.getAttribute("data-name"));
 
           removeEnPassant();
+          castling();
+          console.log(pieces);
         }
       );
 
-      // function checkCastling() {
+      function castling() {
+        if (
+          pieceDragged.getAttribute("data-piece").split("_")[0] === "king" &&
+          targetSquare === "g1"
+        ) {
+          console.log("GOGOGOGOGO");
+          updatePiece("rook_2_white", "f1");
 
-      //   if (castling("short") !== false) {
-      //     movePossible.push(castling("short"));
-      //   }
-      //   if (castling("long") !== false) {
-      //     movePossible.push("long");
-      //   }
-      //   console.log(pieces);
-
-      //   const piece = pieceDragged.getAttribute("data-piece").split("_");
-      //   const type = piece[0];
-
-      //   if (type === "king" && targetSquare === "g1") {
-      //   }
-      //   if (type === "king" && targetSquare === "c1") {
-      //   }
-      // }
+          //const rook = pieces.filter(piece => piece.name === "rook_2_white");
+        }
+      }
 
       function removeEnPassant() {
         if (
@@ -153,6 +141,8 @@ class PieceContainer extends Component {
     } = this.props;
 
     const { styleTop, styleLeft, styleEvent } = this.state;
+    console.log(name);
+    console.log(styleLeft);
 
     const styles = {
       position: "absolute",

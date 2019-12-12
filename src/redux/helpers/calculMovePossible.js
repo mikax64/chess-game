@@ -1,5 +1,3 @@
-import { calculCastling } from "./calculCastling";
-
 export const calculMovePossible = (pieceList, piece) => {
   const axeX = "abcdefgh";
   const pieceName = piece.name.split("_")[0];
@@ -20,7 +18,7 @@ export const calculMovePossible = (pieceList, piece) => {
   const addMoveKing = (squareX, squareY, type = false) => {
     const letter = axeX.charAt(squareX - 1);
     const squareToAdd = letter + squareY;
-    //console.log(type);
+
     if (
       type === false &&
       squareX > 0 &&
@@ -28,20 +26,6 @@ export const calculMovePossible = (pieceList, piece) => {
       squareY > 0 &&
       squareY < 9 &&
       (isEmptySquare(squareX, squareY) || isOpponent(squareX, squareY))
-    ) {
-      movePossible.push(squareToAdd);
-    }
-
-    if (
-      type === "short" &&
-      calculCastling("short", pieceList, pieceColor) !== false
-    ) {
-      movePossible.push(squareToAdd);
-    }
-
-    if (
-      type === "long" &&
-      calculCastling("long", pieceList, pieceColor) !== false
     ) {
       movePossible.push(squareToAdd);
     }
@@ -170,7 +154,6 @@ export const calculMovePossible = (pieceList, piece) => {
       return movePossible;
     }
     case "king": {
-      console.log("king");
       let moveX = pieceAxeX;
       let moveY = pieceAxeY;
 
@@ -182,9 +165,6 @@ export const calculMovePossible = (pieceList, piece) => {
       addMoveKing(moveX - 1, moveY - 1);
       addMoveKing(moveX - 1, moveY);
       addMoveKing(moveX - 1, moveY + 1);
-
-      addMoveKing(moveX + 2, moveY, "short");
-      addMoveKing(moveX - 3, moveY, "long");
 
       return movePossible;
     }
@@ -204,7 +184,6 @@ export const calculMovePossible = (pieceList, piece) => {
       return movePossible;
     }
     case "bishop": {
-      console.log("bishop");
       moves("topRight");
       moves("topLeft");
       moves("bottomRight");

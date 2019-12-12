@@ -5,6 +5,8 @@ import { getRelativeHistoric } from "../helpers/getRelativeHistoric";
 export const pieceReducer = (state = pieceList, action) => {
   switch (action.type) {
     case "UPDATE_POSITION_PIECE": {
+      console.log(state);
+      console.log(action.meta);
       return state.map(piece => {
         if (piece.name === action.payload) {
           return { ...piece, currentSquare: action.meta, hasMoved: true };
@@ -64,6 +66,21 @@ export const pieceReducer = (state = pieceList, action) => {
         } else {
           return { ...piece };
         }
+      });
+    }
+
+    case "UPDTATE_CASTLING": {
+      return state.map(piece => {
+        if (piece.name === action.payload.name) {
+          if (action.add) {
+            return {
+              ...piece,
+              movePossible: [...piece.movePossible, action.meta]
+            };
+          }
+        }
+
+        return { ...piece };
       });
     }
 

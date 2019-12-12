@@ -29,9 +29,9 @@ export const calculCastling = (type, pieceList, pieceColor) => {
     square4,
     square5 = null
   ) => {
-    for (let i = 0; pieceList.length; i++) {
+    for (let i = 0; i < pieceList.length; i++) {
       if (
-        pieceList[i] === opponentColor &&
+        pieceList[i].pieceColor === opponentColor &&
         (pieceList[i].movePossible.includes(square1) ||
           pieceList[i].movePossible.includes(square2) ||
           pieceList[i].movePossible.includes(square3) ||
@@ -39,10 +39,9 @@ export const calculCastling = (type, pieceList, pieceColor) => {
           pieceList[i].movePossible.includes(square5))
       ) {
         return true;
-      } else {
-        return false;
       }
     }
+    return false;
   };
 
   if (
@@ -84,9 +83,9 @@ export const calculCastling = (type, pieceList, pieceColor) => {
     pieceColor === "black" &&
     king.hasMoved === false &&
     rookOne.hasMoved === false &&
-    isEmptySquare(2, 1) &&
-    isEmptySquare(3, 1) &&
-    isEmptySquare(4, 1) &&
+    isEmptySquare(2, 8) &&
+    isEmptySquare(3, 8) &&
+    isEmptySquare(4, 8) &&
     isSquareThreatened("a8", "b8", "c8", "d8", "e8") === false
   ) {
     return "b8";

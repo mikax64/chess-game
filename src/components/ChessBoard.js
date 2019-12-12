@@ -42,12 +42,6 @@ class ChessBoard extends Component {
     this.setState({
       chessIsMount: true
     });
-
-    console.log(board);
-  }
-
-  someMethod() {
-    console.log("bar");
   }
 
   render() {
@@ -59,6 +53,8 @@ class ChessBoard extends Component {
       width: sizeBoard + "px",
       height: sizeBoard + "px"
     };
+
+    console.log("object");
 
     return (
       <div
@@ -79,7 +75,6 @@ class ChessBoard extends Component {
               key={el.name}
               data={el}
               removePiece={this.someMethod}
-              positionpiece={this[`squareRef_${el.currentSquare}`]}
             ></PieceContainer>
           ))}
       </div>

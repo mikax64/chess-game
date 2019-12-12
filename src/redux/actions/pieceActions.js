@@ -1,6 +1,8 @@
 import { kingCheck } from "../helpers/kingCheck";
 import { kingCheckMoves } from "../helpers/kingCheckMoves";
 
+import { calculCastling } from "./../helpers/calculCastling";
+
 export const calculMoves = () => {
   return {
     type: "CALCUL_MOVES"
@@ -70,6 +72,7 @@ export const updateKingCheckMoves = piece => {
 };
 
 export const updateCastling = (piece, square, add) => {
+  console.log("go");
   return {
     type: "UPDTATE_CASTLING",
     payload: piece,
@@ -97,5 +100,24 @@ export const updatePiece = (pieceName, newPosition) => {
     }
 
     kingCheckMoves(pieces, game.playerTurn);
+    checkCastling();
+
+    function checkCastling() {
+      const castling = (type, kingColor) => {
+        if (calculCastling(type, pieces, kingColor) !== false) {
+          const piece = pieces.filter(
+            piece => piece.name === `king_1_${kingColor}`
+          )[0];
+          dispatch(
+            updateCastling(piece, calculCastling(type, pieces, kingColor), true)
+          );
+        }
+      };
+
+      castling("short", "white");
+      castling("long", "white");
+      castling("short", "black");
+      castling("long", "black");
+    }
   };
 };
