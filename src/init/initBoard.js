@@ -60,9 +60,9 @@ function initPiece() {
       historic: [squarePieceInit[i]],
       relativeHistoric: [],
       hasMoved: false,
-      targetEnPassant: null,
       xPosition: null,
-      yPosition: null
+      yPosition: null,
+      index: i
     });
   }
 }

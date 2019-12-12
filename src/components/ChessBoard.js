@@ -70,9 +70,8 @@ class ChessBoard extends Component {
           pieces.map(el => (
             <PieceContainer
               refParent={this.boardRef}
-              key={el.name}
+              key={el.index}
               data={el}
-              removePiece={this.someMethod}
             ></PieceContainer>
           ))}
       </div>

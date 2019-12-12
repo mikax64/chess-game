@@ -1,8 +1,14 @@
+body {
+  background: #20223f;
+}
+
 .chessBoard {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row-reverse;
   position: relative;
+  margin: 50px auto;
+  border: 8px solid #3c407d;
 }
 .square {
   flex: 0 0 12.5%;
@@ -10,19 +16,91 @@
   font-weight: bold;
 
   &.is-black {
-    background: black;
+    background: -moz-linear-gradient(
+      -45deg,
+      #987fbf 0%,
+      #5caae8 100%
+    ); /* FF3.6-15 */
+    background: -webkit-linear-gradient(
+      -45deg,
+      #987fbf 0%,
+      #5caae8 100%
+    ); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(
+      135deg,
+      #987fbf 0%,
+      #5caae8 100%
+    ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   }
   &.is-white {
-    background: #505050;
+    background: -moz-linear-gradient(
+      -45deg,
+      #e8f5ff 5%,
+      #d3edff 100%
+    ); /* FF3.6-15 */
+    background: -webkit-linear-gradient(
+      -45deg,
+      #e8f5ff 5%,
+      #d3edff 100%
+    ); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(
+      135deg,
+      #e8f5ff 5%,
+      #d3edff 100%
+    ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   }
 }
 
 .piece {
-  background: rgba(124, 12, 74, 0.3);
+  background-size: contain;
   width: 12.5%;
   height: 12.5%;
   padding: 30px 5px 0 5px;
   color: #fff;
   word-break: break-all;
   box-sizing: border-box;
+  cursor: pointer;
+
+  &.pawn-black {
+    background-image: url("./assets/pawn-black.svg");
+    background-size: 85%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  &.pawn-white {
+    background-image: url("./assets/pawn-white.svg");
+    background-size: 85%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  &.rook-black {
+    background-image: url("./assets/rook-black.svg");
+  }
+  &.rook-white {
+    background-image: url("./assets/rook-white.svg");
+  }
+  &.knight-black {
+    background-image: url("./assets/knight-black.svg");
+  }
+  &.knight-white {
+    background-image: url("./assets/knight-white.svg");
+  }
+  &.bishop-black {
+    background-image: url("./assets/bishop-black.svg");
+  }
+  &.bishop-white {
+    background-image: url("./assets/bishop-white.svg");
+  }
+  &.queen-black {
+    background-image: url("./assets/queen-black.svg");
+  }
+  &.queen-white {
+    background-image: url("./assets/queen-white.svg");
+  }
+  &.king-black {
+    background-image: url("./assets/king-black.svg");
+  }
+  &.king-white {
+    background-image: url("./assets/king-white.svg");
+  }
 }

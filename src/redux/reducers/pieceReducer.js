@@ -6,7 +6,6 @@ import { calculSquarePosition } from "../helpers/calculSquarePosition";
 export const pieceReducer = (state = pieceList, action) => {
   switch (action.type) {
     case "UPDATE_POSITION_PIECE": {
-      console.log("update");
       return state.map(piece => {
         if (piece.name === action.payload) {
           return {
@@ -49,6 +48,18 @@ export const pieceReducer = (state = pieceList, action) => {
         ...state.slice(0, action.payload),
         ...state.slice(action.payload + 1)
       ];
+    }
+    case "PROMOTION_PIECE": {
+      return state.map(piece => {
+        if (piece.name === action.payload) {
+          return {
+            ...piece,
+            type: "queen",
+            name: `queen${action.meta}`
+          };
+        }
+        return { ...piece };
+      });
     }
 
     case "RESET_MOVES": {

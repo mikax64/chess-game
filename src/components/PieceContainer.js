@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Draggable from "react-draggable";
-import { updatePiece, removePiece } from "../redux/actions/pieceActions";
+import {
+  updatePiece,
+  removePiece,
+  promotionPiece
+} from "../redux/actions/pieceActions";
 import {
   changePlayerTurn,
   updateGlobalHistoric
@@ -15,8 +19,11 @@ class PieceContainer extends Component {
     } = props;
 
     this.state = {
+      styleTop: null,
+      styleLeft: null,
       styleEvent: "initial",
-      pieceDragged: null
+      pieceDragged: null,
+      isDragged: false
     };
 
     //this.pieceRef = React.createRef();
@@ -30,18 +37,19 @@ class PieceContainer extends Component {
       styleTop: e.clientY - refParent.current.offsetTop - sizeSquare,
       styleLeft: e.clientX - refParent.current.offsetLeft - sizeSquare,
       styleEvent: "none", // to get the target mouseUp on Square,
-      pieceDragged: e.target
+      pieceDragged: e.target,
+      isDragged: true
     });
-    //console.log(pieces);
   };
   onStopDrag = e => {
     const {
       updatePiece,
       removePiece,
+      promotionPiece,
       changePlayerTurn,
       pieces,
       game,
-      data: { name, pieceColor, type, historic, xPosition, yPosition }
+      data: { name, pieceColor, type, historic }
     } = this.props;
 
     const { pieceDragged } = this.state;
@@ -69,7 +77,8 @@ class PieceContainer extends Component {
     if (movePossible.includes(targetSquare) && pieceColor === game.playerTurn) {
       this.setState(
         {
-          styleEvent: "initial"
+          styleEvent: "initial",
+          isDragged: false
         },
         () => {
           changePlayerTurn();
@@ -77,29 +86,49 @@ class PieceContainer extends Component {
           updateGlobalHistoric(pieceDragged.getAttribute("data-name"));
 
           removeEnPassant();
-          castling();
+          handleCastling();
+          handlePromotion();
         }
       );
 
-      function castling() {
+      function handlePromotion() {
+        const pieceName = pieceDragged.getAttribute("data-piece");
+        const piece = pieceName.split("_")[0];
+
+        if (
+          (piece === "pawn" && parseInt(targetSquare[1]) === 8) ||
+          parseInt(targetSquare[1]) === 1
+        ) {
+          const numberOfQueens = pieces.filter(piece => {
+            return piece.type === "queen" && piece.pieceColor === pieceColor;
+          });
+
+          const newNumberQueen = numberOfQueens.length + 1;
+
+          const endName = `_${newNumberQueen}_${pieceColor}`;
+          console.log(endName);
+
+          promotionPiece(pieceName, endName);
+        }
+      }
+
+      function handleCastling() {
         const piece = pieceDragged.getAttribute("data-piece").split("_")[0];
         const pieceFullName = pieceDragged.getAttribute("data-piece");
         const hasMoved = pieces.filter(piece => piece.name === pieceFullName)[0]
           .hasMoved;
 
-        console.log(hasMoved);
-
         if (!hasMoved && piece === "king" && targetSquare === "g1") {
           updatePiece("rook_2_white", "f1");
         }
         if (!hasMoved && piece === "king" && targetSquare === "b1") {
-          updatePiece("rook_2_white", "c1");
+          updatePiece("rook_1_white", "c1");
         }
         if (!hasMoved && piece === "king" && targetSquare === "g8") {
           updatePiece("rook_2_black", "f8");
         }
         if (!hasMoved && piece === "king" && targetSquare === "b8") {
-          updatePiece("rook_2_white", "c8");
+          updatePiece("rook_1_black", "c8");
         }
       }
 
@@ -126,9 +155,8 @@ class PieceContainer extends Component {
       }
     } else {
       this.setState({
-        styleTop: this.state.initStyleTop,
-        styleLeft: this.state.initStyleLeft,
-        styleEvent: "initial"
+        styleEvent: "initial",
+        isDragged: false
       });
     }
   };
@@ -139,27 +167,40 @@ class PieceContainer extends Component {
       data: { name }
     } = this.props;
 
-    const { styleTop, styleLeft, styleEvent } = this.state;
+    const { styleEvent, styleTop, styleLeft, isDragged } = this.state;
     const {
-      pieces,
-      data: { xPosition, yPosition }
+      data: { xPosition, yPosition, type, pieceColor }
     } = this.props;
 
     const styles = {
       position: "absolute",
       top: yPosition + "px",
       left: xPosition + "px",
-      pointerEvents: styleEvent
+      pointerEvents: styleEvent,
+      zIndex: 1
     };
+
+    if (isDragged) {
+      styles.top = styleTop + "px";
+      styles.left = styleLeft + "px";
+      styles.zIndex = 10;
+    } else {
+      styles.top = yPosition + "px";
+      styles.left = xPosition + "px";
+    }
+
     return (
       <Draggable
         position={{ x: 0, y: 0 }}
         onStart={this.onStartDrag}
         onStop={this.onStopDrag}
       >
-        <div ref={refName} className={`piece`} style={styles} data-piece={name}>
-          {name}
-        </div>
+        <div
+          ref={refName}
+          className={`piece ${type}-${pieceColor}`}
+          style={styles}
+          data-piece={name}
+        ></div>
       </Draggable>
     );
   }
@@ -178,6 +219,8 @@ const mapDispatchToProps = dispatch => {
     updatePiece: (pieceName, newPosition) =>
       dispatch(updatePiece(pieceName, newPosition)),
     removePiece: indexPiece => dispatch(removePiece(indexPiece)),
+    promotionPiece: (pieceName, endName) =>
+      dispatch(promotionPiece(pieceName, endName)),
     changePlayerTurn: () => dispatch(changePlayerTurn()),
     updateGlobalHistoric: pieceDragged =>
       dispatch(updateGlobalHistoric(pieceDragged))

@@ -48,6 +48,7 @@ export const calculCastling = (type, pieceList, pieceColor) => {
     type === "short" &&
     pieceColor === "white" &&
     king.hasMoved === false &&
+    rookTwo !== undefined &&
     rookTwo.hasMoved === false &&
     isEmptySquare(6, 1) &&
     isEmptySquare(7, 1) &&
@@ -59,6 +60,7 @@ export const calculCastling = (type, pieceList, pieceColor) => {
     type === "long" &&
     pieceColor === "white" &&
     king.hasMoved === false &&
+    rookOne !== undefined &&
     rookOne.hasMoved === false &&
     isEmptySquare(2, 1) &&
     isEmptySquare(3, 1) &&
@@ -71,6 +73,7 @@ export const calculCastling = (type, pieceList, pieceColor) => {
     type === "short" &&
     pieceColor === "black" &&
     king.hasMoved === false &&
+    rookTwo !== undefined &&
     rookTwo.hasMoved === false &&
     isEmptySquare(6, 8) &&
     isEmptySquare(7, 8) &&
@@ -82,6 +85,7 @@ export const calculCastling = (type, pieceList, pieceColor) => {
     type === "long" &&
     pieceColor === "black" &&
     king.hasMoved === false &&
+    rookOne !== undefined &&
     rookOne.hasMoved === false &&
     isEmptySquare(2, 8) &&
     isEmptySquare(3, 8) &&

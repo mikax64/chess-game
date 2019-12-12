@@ -41,6 +41,13 @@ export const removePiece = indexPiece => {
     payload: indexPiece
   };
 };
+export const promotionPiece = (pieceName, endName) => {
+  return {
+    type: "PROMOTION_PIECE",
+    payload: pieceName,
+    meta: endName
+  };
+};
 
 export const updateEnPassant = (pieceName, target) => {
   return {
@@ -72,7 +79,6 @@ export const updateKingCheckMoves = piece => {
 };
 
 export const updateCastling = (piece, square, add) => {
-  console.log("go");
   return {
     type: "UPDTATE_CASTLING",
     payload: piece,
