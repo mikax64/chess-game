@@ -15,11 +15,6 @@ class PieceContainer extends Component {
     } = props;
 
     this.state = {
-      initStyleTop: yPosition,
-      initStyleLeft: xPosition,
-
-      styleTop: yPosition,
-      styleLeft: xPosition,
       styleEvent: "initial",
       pieceDragged: null
     };
@@ -46,12 +41,11 @@ class PieceContainer extends Component {
       changePlayerTurn,
       pieces,
       game,
-      data: { name, pieceColor, type, historic }
+      data: { name, pieceColor, type, historic, xPosition, yPosition }
     } = this.props;
 
     const { pieceDragged } = this.state;
-    const targetX = e.target.offsetLeft;
-    const targetY = e.target.offsetTop;
+
     let targetSquare;
     const movePossible = pieces.filter(piece => piece.name === name)[0]
       .movePossible;
@@ -75,10 +69,6 @@ class PieceContainer extends Component {
     if (movePossible.includes(targetSquare) && pieceColor === game.playerTurn) {
       this.setState(
         {
-          styleTop: targetY,
-          styleLeft: targetX,
-          initStyleTop: targetY,
-          initStyleLeft: targetX,
           styleEvent: "initial"
         },
         () => {
@@ -88,19 +78,28 @@ class PieceContainer extends Component {
 
           removeEnPassant();
           castling();
-          console.log(pieces);
         }
       );
 
       function castling() {
-        if (
-          pieceDragged.getAttribute("data-piece").split("_")[0] === "king" &&
-          targetSquare === "g1"
-        ) {
-          console.log("GOGOGOGOGO");
-          updatePiece("rook_2_white", "f1");
+        const piece = pieceDragged.getAttribute("data-piece").split("_")[0];
+        const pieceFullName = pieceDragged.getAttribute("data-piece");
+        const hasMoved = pieces.filter(piece => piece.name === pieceFullName)[0]
+          .hasMoved;
 
-          //const rook = pieces.filter(piece => piece.name === "rook_2_white");
+        console.log(hasMoved);
+
+        if (!hasMoved && piece === "king" && targetSquare === "g1") {
+          updatePiece("rook_2_white", "f1");
+        }
+        if (!hasMoved && piece === "king" && targetSquare === "b1") {
+          updatePiece("rook_2_white", "c1");
+        }
+        if (!hasMoved && piece === "king" && targetSquare === "g8") {
+          updatePiece("rook_2_black", "f8");
+        }
+        if (!hasMoved && piece === "king" && targetSquare === "b8") {
+          updatePiece("rook_2_white", "c8");
         }
       }
 
@@ -141,13 +140,15 @@ class PieceContainer extends Component {
     } = this.props;
 
     const { styleTop, styleLeft, styleEvent } = this.state;
-    console.log(name);
-    console.log(styleLeft);
+    const {
+      pieces,
+      data: { xPosition, yPosition }
+    } = this.props;
 
     const styles = {
       position: "absolute",
-      top: styleTop + "px",
-      left: styleLeft + "px",
+      top: yPosition + "px",
+      left: xPosition + "px",
       pointerEvents: styleEvent
     };
     return (

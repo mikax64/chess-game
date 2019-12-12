@@ -1,4 +1,5 @@
 import { pieceName, squarePieceInit } from "./pieceAndSquare";
+import { calculSquarePosition } from "../redux/helpers/calculSquarePosition";
 
 const axeX = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const squareNames = [];
@@ -67,13 +68,9 @@ function initPiece() {
 }
 
 function calculPiecePosition() {
-  const squareSize = boardSize / 8;
-
   pieceList.map(piece => {
-    const squareX = axeX.indexOf(piece.currentSquare[0]);
-    const squareY = piece.currentSquare[1];
-    piece.xPosition = squareX * squareSize;
-    piece.yPosition = boardSize - squareSize * squareY;
+    piece.xPosition = calculSquarePosition(piece.currentSquare).xPosition;
+    piece.yPosition = calculSquarePosition(piece.currentSquare).yPosition;
     return piece;
   });
 }

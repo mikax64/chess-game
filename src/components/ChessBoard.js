@@ -54,8 +54,6 @@ class ChessBoard extends Component {
       height: sizeBoard + "px"
     };
 
-    console.log("object");
-
     return (
       <div
         style={styles}

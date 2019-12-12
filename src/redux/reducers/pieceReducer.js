@@ -1,15 +1,21 @@
 import { pieceList } from "../../init/initBoard";
 import { calculMovePossible } from "../helpers/calculMovePossible";
 import { getRelativeHistoric } from "../helpers/getRelativeHistoric";
+import { calculSquarePosition } from "../helpers/calculSquarePosition";
 
 export const pieceReducer = (state = pieceList, action) => {
   switch (action.type) {
     case "UPDATE_POSITION_PIECE": {
-      console.log(state);
-      console.log(action.meta);
+      console.log("update");
       return state.map(piece => {
         if (piece.name === action.payload) {
-          return { ...piece, currentSquare: action.meta, hasMoved: true };
+          return {
+            ...piece,
+            currentSquare: action.meta,
+            hasMoved: true,
+            xPosition: calculSquarePosition(action.meta).xPosition,
+            yPosition: calculSquarePosition(action.meta).yPosition
+          };
         }
         return { ...piece };
       });
