@@ -14,6 +14,19 @@ body {
   flex: 0 0 12.5%;
   color: white;
   font-weight: bold;
+  position: relative;
+
+  &.is-movePossible:after {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    background: #3c407d !important;
+    position: absolute;
+    left: calc(50% - 8px);
+    top: calc(50% - 8px);
+  }
 
   &.is-black {
     background: -moz-linear-gradient(
@@ -103,4 +116,15 @@ body {
   &.king-white {
     background-image: url("./assets/king-white.svg");
   }
+}
+
+.checkmate-box {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
+  left: -180px;
+  z-index: 20;
+  top: 50%;
+  padding: 10px;
+  font-size: 30px;
+  color: #fff;
 }

@@ -1,7 +1,9 @@
 const inititalState = {
   playerTurn: "white",
   globalHistoric: { pieceMove: [] },
-  kingCheck: { isCheck: false, color: null }
+  kingCheck: { isCheck: false, color: null },
+  currentMovePossible: [],
+  isCheckMate: false
 };
 
 export const gameReducer = (state = inititalState, action) => {
@@ -19,6 +21,13 @@ export const gameReducer = (state = inititalState, action) => {
       };
     }
 
+    case "DISPLAY_MOVE_POSSIBLE": {
+      return {
+        ...state,
+        currentMovePossible: action.payload
+      };
+    }
+
     case "KING_CHECK_UPDATE": {
       return {
         ...state,
@@ -29,6 +38,12 @@ export const gameReducer = (state = inititalState, action) => {
       return {
         ...state,
         kingCheck: { ...state.kingCheck, isCheck: false, color: null }
+      };
+    }
+    case "UPDATE_CHECKMATE": {
+      return {
+        ...state,
+        isCheckMate: true
       };
     }
     default: {

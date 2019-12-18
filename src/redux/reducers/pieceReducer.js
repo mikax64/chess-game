@@ -67,7 +67,7 @@ export const pieceReducer = (state = pieceList, action) => {
         if (piece.pieceColor === action.payload)
           return {
             ...piece,
-            movePossible: [""]
+            movePossible: []
           };
         return { ...piece };
       });

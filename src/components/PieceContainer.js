@@ -4,7 +4,8 @@ import Draggable from "react-draggable";
 import {
   updatePiece,
   removePiece,
-  promotionPiece
+  promotionPiece,
+  displayMovePossible
 } from "../redux/actions/pieceActions";
 import {
   changePlayerTurn,
@@ -30,8 +31,14 @@ class PieceContainer extends Component {
   }
 
   onStartDrag = e => {
-    const { refParent, refName, pieces } = this.props;
+    const {
+      refParent,
+      pieces,
+      data: { name },
+      displayMovePossible
+    } = this.props;
     const sizeSquare = e.target.offsetWidth / 2;
+    const moves = pieces.filter(piece => piece.name === name)[0].movePossible;
 
     this.setState({
       styleTop: e.clientY - refParent.current.offsetTop - sizeSquare,
@@ -40,6 +47,8 @@ class PieceContainer extends Component {
       pieceDragged: e.target,
       isDragged: true
     });
+
+    displayMovePossible(moves);
   };
   onStopDrag = e => {
     const {
@@ -48,11 +57,13 @@ class PieceContainer extends Component {
       promotionPiece,
       changePlayerTurn,
       pieces,
+      displayMovePossible,
       game,
       data: { name, pieceColor, type, historic }
     } = this.props;
 
     const { pieceDragged } = this.state;
+    displayMovePossible([""]);
 
     let targetSquare;
     const movePossible = pieces.filter(piece => piece.name === name)[0]
@@ -222,7 +233,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(promotionPiece(pieceName, endName)),
     changePlayerTurn: () => dispatch(changePlayerTurn()),
     updateGlobalHistoric: pieceDragged =>
-      dispatch(updateGlobalHistoric(pieceDragged))
+      dispatch(updateGlobalHistoric(pieceDragged)),
+    displayMovePossible: moves => dispatch(displayMovePossible(moves))
   };
 };
 

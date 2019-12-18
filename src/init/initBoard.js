@@ -56,7 +56,7 @@ function initPiece() {
       currentSquare: squarePieceInit[i],
       pieceColor: splitPiece[2],
       type: splitPiece[0],
-      movePossible: [""],
+      movePossible: [],
       historic: [squarePieceInit[i]],
       relativeHistoric: [],
       hasMoved: false,

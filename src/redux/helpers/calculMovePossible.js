@@ -93,7 +93,7 @@ export const calculMovePossible = (pieceList, piece) => {
             isEnPassant = true;
             addMovePawn(moveX - 1, moveY + 1, isDiagonal, isEnPassant);
           }
-          if (!piece.hasMoved) {
+          if (!piece.hasMoved && isEmptySquare(moveX, moveY + 1)) {
             addMovePawn(moveX, moveY + 2, isDiagonal, isEnPassant);
           }
         }
@@ -125,7 +125,7 @@ export const calculMovePossible = (pieceList, piece) => {
             isEnPassant = true;
             addMovePawn(moveX - 1, moveY - 1, isDiagonal, isEnPassant);
           }
-          if (!piece.hasMoved) {
+          if (!piece.hasMoved && isEmptySquare(moveX, moveY - 1)) {
             addMovePawn(moveX, moveY - 2, isDiagonal);
           }
         }

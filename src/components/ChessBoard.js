@@ -43,9 +43,10 @@ class ChessBoard extends Component {
       chessIsMount: true
     });
   }
+  componentDidUpdate() {}
 
   render() {
-    const { board, pieces } = this.props;
+    const { board, pieces, game } = this.props;
     const { chessIsMount, playerTurn } = this.state;
     const sizeBoard = 600;
 
@@ -62,6 +63,8 @@ class ChessBoard extends Component {
         className="chessBoard"
         ref={this.boardRef}
       >
+        {game.isCheckMate && <div className="checkmate-box">Checkmate! </div>}
+
         {board.map(el => (
           <Square key={el.squareName} data={el}></Square>
         ))}
@@ -82,7 +85,8 @@ class ChessBoard extends Component {
 const mapStateToProps = state => {
   return {
     board: state.board,
-    pieces: state.pieces
+    pieces: state.pieces,
+    game: state.game
   };
 };
 

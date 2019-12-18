@@ -87,6 +87,19 @@ export const updateCastling = (piece, square, add) => {
   };
 };
 
+export const displayMovePossible = moves => {
+  return {
+    type: "DISPLAY_MOVE_POSSIBLE",
+    payload: moves
+  };
+};
+
+export const updateCheckMate = () => {
+  return {
+    type: "UPDATE_CHECKMATE"
+  };
+};
+
 export const updatePiece = (pieceName, newPosition) => {
   return (dispatch, getState) => {
     dispatch(updatePiecePosition(pieceName, newPosition));
@@ -106,7 +119,23 @@ export const updatePiece = (pieceName, newPosition) => {
     }
 
     kingCheckMoves(pieces, game.playerTurn);
+
+    if (isCheckMate()) {
+      dispatch(updateCheckMate());
+    }
     checkCastling();
+
+    function isCheckMate() {
+      const { pieces, game } = getState();
+      for (let i = 0; i < pieces.length; i++) {
+        if (pieces[i].pieceColor === game.playerTurn) {
+          const moves = pieces[i].movePossible;
+
+          if (moves.length > 0) return false;
+        }
+      }
+      return true;
+    }
 
     function checkCastling() {
       const castling = (type, kingColor) => {
