@@ -19,13 +19,14 @@ body {
   &.is-movePossible:after {
     content: "";
     display: block;
-    width: 16px;
-    height: 16px;
+    width: 28px;
+    height: 28px;
     border-radius: 100%;
     background: #3c407d !important;
     position: absolute;
-    left: calc(50% - 8px);
-    top: calc(50% - 8px);
+    left: calc(50% - 14px);
+    top: calc(50% - 14px);
+    opacity: 0.4;
   }
 
   &.is-black {

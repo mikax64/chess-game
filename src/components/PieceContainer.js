@@ -105,7 +105,6 @@ class PieceContainer extends Component {
       function handlePromotion() {
         const pieceName = pieceDragged.getAttribute("data-piece");
         const piece = pieceName.split("_")[0];
-        console.log(piece);
 
         if (
           (piece === "pawn" && parseInt(targetSquare[1]) === 8) ||

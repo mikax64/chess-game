@@ -26,16 +26,6 @@ class ChessBoard extends Component {
     this.setState({ x: mouseXPosition, y: mouseYPosition });
   };
 
-  showTarget = e => {
-    const { board, pieces } = this.props;
-
-    //this[`squareRef_a4`].current.remove();
-    //this[`pieceRef_pawn_4_white`].current.remove();
-
-    //this[`pieceRef_knight_3_black`] = React.createRef();
-
-    //this[`pieceRef_rook_2_white`].current.offsetLeft = 130;
-  };
   componentDidMount() {
     const { calculMoves, board } = this.props;
     calculMoves();
@@ -58,7 +48,6 @@ class ChessBoard extends Component {
     return (
       <div
         style={styles}
-        onMouseUp={this.showTarget}
         onMouseMove={this.onMouseMove}
         className="chessBoard"
         ref={this.boardRef}
